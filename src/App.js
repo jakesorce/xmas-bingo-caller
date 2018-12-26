@@ -1,25 +1,90 @@
-import React, { Component } from 'react';
-import logo from './logo.svg';
-import './App.css';
+import React, { Component } from "react";
+import presentImg from "./images/xmas-present.gif";
+import "./App.css";
+
+const LETTERS = ["B", "I", "N", "G", "O"];
+const ITEMS = [
+  "cloud",
+  "wreath",
+  "thermometer",
+  "hot chocolate",
+  "hat",
+  "candy cane",
+  "candles",
+  "ornaments",
+  "milk and cookies",
+  "snowflake",
+  "snow globe",
+  "trees",
+  "snowman",
+  "bell",
+  "stocking",
+  "cheers",
+  "christmas lights",
+  "turkey",
+  "present",
+  "igloo",
+  "star",
+  "tram",
+  "ornaments",
+  "candy canes"
+];
 
 class App extends Component {
+  state = { currentItem: null, gameItems: [] };
+
+  componentDidMount() {
+    let gameItems = [];
+
+    LETTERS.forEach(letter => {
+      ITEMS.forEach(item => {
+        gameItems.push({ [letter]: item });
+      });
+    });
+    this.setState({ gameItems });
+  }
+
+  call = () => {
+    const items = this.state.gameItems;
+
+    const randomItemIndex = Math.floor(Math.random() * items.length); // Random Index position in the array
+    const item = items.splice(randomItemIndex, 1); // Splice out a random element using the ri var
+    this.setState({ currentItem: item[0], gameItems: items });
+  };
+
+  displayBingoCall = () => {
+    const { currentItem } = this.state;
+    if (!currentItem) return;
+    const keys = Object.keys(currentItem);
+    console.log(keys);
+    return (
+      <div className="bingoCall">
+        <h1>
+          {keys[0]}-{currentItem[keys[0]]}
+        </h1>
+      </div>
+    );
+  };
+
   render() {
     return (
-      <div className="App">
-        <header className="App-header">
-          <img src={logo} className="App-logo" alt="logo" />
-          <p>
-            Edit <code>src/App.js</code> and save to reload.
-          </p>
-          <a
-            className="App-link"
-            href="https://reactjs.org"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Learn React
-          </a>
-        </header>
+      <div
+        style={{
+          display: "flex",
+          justifyContent: "center",
+          alignItems: "center"
+        }}
+      >
+        <div className="App">
+          <h1>Ellis Christmas Bingo!</h1>
+          {this.displayBingoCall()}
+          <img
+            src={presentImg}
+            className="presentButton"
+            alt="present"
+            onClick={this.call}
+          />
+        </div>
       </div>
     );
   }
