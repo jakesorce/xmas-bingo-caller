@@ -33,7 +33,7 @@ const ITEMS = [
 class App extends Component {
   state = { currentItem: null, gameItems: [] };
 
-  componentDidMount() {
+  setupGame = () => {
     let gameItems = [];
 
     LETTERS.forEach(letter => {
@@ -41,7 +41,12 @@ class App extends Component {
         gameItems.push({ [letter]: item });
       });
     });
-    this.setState({ gameItems });
+
+    this.setState({ gameItems, currentItem: null });
+  };
+
+  componentDidMount() {
+    this.setupGame();
   }
 
   call = () => {
@@ -56,7 +61,7 @@ class App extends Component {
     const { currentItem } = this.state;
     if (!currentItem) return;
     const keys = Object.keys(currentItem);
-    console.log(keys);
+
     return (
       <div className="bingoCall">
         <h1>
@@ -71,6 +76,7 @@ class App extends Component {
       <div
         style={{
           display: "flex",
+          flexDirection: "column",
           justifyContent: "center",
           alignItems: "center"
         }}
@@ -84,6 +90,9 @@ class App extends Component {
             alt="present"
             onClick={this.call}
           />
+          <button className="resetButton" onClick={this.setupGame}>
+            Reset
+          </button>
         </div>
       </div>
     );
